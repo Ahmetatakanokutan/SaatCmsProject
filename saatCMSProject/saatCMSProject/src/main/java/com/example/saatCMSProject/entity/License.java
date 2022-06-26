@@ -1,5 +1,6 @@
 package com.example.saatCMSProject.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -30,12 +31,12 @@ public class License {
 	private String name;
 	
 	@Column(name = "start_time")
-	private int startTime;
+	private Date startTime;
 	
 	@Column(name = "ent_time")
-	private int endTime;
+	private Date endTime;
 	
 	@ManyToMany()
-	List<License> contents;
+	List<Content> contents;
 	
 }

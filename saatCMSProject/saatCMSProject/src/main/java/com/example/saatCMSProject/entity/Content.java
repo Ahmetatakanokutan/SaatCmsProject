@@ -22,26 +22,22 @@ import lombok.NoArgsConstructor;
 public class Content {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	
+
 	@Column(name = "content_id")
 	private int id;
-	
 
-	
 	@ManyToMany()
-	List<Content> licences;
+	private List<License> licenses;
 
-	
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "status")
-	private boolean status;
-	
-	
+	private String status;
+
 	@Column(name = "poster_url")
 	private String posterUrl;
-	
+
 	@Column(name = "video_url")
 	private String videoUrl;
 }

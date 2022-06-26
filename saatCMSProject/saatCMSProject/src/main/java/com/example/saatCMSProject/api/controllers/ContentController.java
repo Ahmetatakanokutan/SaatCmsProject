@@ -16,38 +16,42 @@ import com.example.saatCMSProject.entity.Content;
 @RestController
 @RequestMapping("api/Content")
 public class ContentController {
-	
+
 	ContentService contentService;
-	
+
 	@Autowired
 	public ContentController(ContentService contentService) {
 		super();
 		this.contentService = contentService;
 	}
 
-
 	@PostMapping("add_content")
-		Result addContent(Content Content){
-			return contentService.addContent(Content);
-			
-		}
-	
+	Result addContent(Content Content) {
+		return contentService.addContent(Content);
+
+	}
 
 	@GetMapping("/get_content")
 	DataResult<Content> getContent(int id) {
 		return contentService.getContent(id);
-		
+
 	}
-	
+
 	@PostMapping("/delete_content")
 	Result deleteContent(Content content) {
 		return contentService.deleteContent(content);
-		
+
 	}
-	
+
 	@GetMapping("/get_all")
-	DataResult<List<Content>> getAll(){
+	DataResult<List<Content>> getAll() {
 		return contentService.getAll();
+	}
+
+	@PostMapping("/update")
+	Result updateContent(String name, Content content) {
+		return contentService.updateContent(name, content);
+
 	}
 
 }

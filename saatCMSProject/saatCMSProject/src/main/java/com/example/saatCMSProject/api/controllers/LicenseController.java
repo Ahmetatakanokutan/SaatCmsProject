@@ -3,6 +3,7 @@ package com.example.saatCMSProject.api.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +14,11 @@ import com.example.saatCMSProject.core.results.DataResult;
 import com.example.saatCMSProject.core.results.Result;
 import com.example.saatCMSProject.core.results.SuccessResult;
 import com.example.saatCMSProject.entity.License;
+import com.example.saatCMSProject.entity.dtos.LicenseDto;
 
 @RestController
 @RequestMapping("api/licenses")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class LicenseController {
 	LicenseService licenseService;
 
@@ -25,24 +28,24 @@ public class LicenseController {
 		this.licenseService = licenseService;
 	}
 
-	@GetMapping("/getAll")
+	@GetMapping("/get_all")
 	DataResult<List<License>> getAll() {
 		return licenseService.getAll();
 	}
 
-	@GetMapping("/getById")
+	@GetMapping("/get_by_id")
 	DataResult<License> getById(int id) {
 		return licenseService.getById(id);
 	}
 
-	@PostMapping("/addLicense")
-	Result addLicense(License license) {
-		return licenseService.addLicense(license);
+	@PostMapping("/add_license")
+	Result addLicense(LicenseDto licenseDto) {
+		return licenseService.addLicense(licenseDto);
 	}
 
-	@PostMapping("/deleteLicense")
-	Result deleteLicense(License license) {
-		licenseService.deleteLicense(license);
+	@PostMapping("/delete_license")
+	Result deleteLicense(String name) {
+		licenseService.deleteLicense(name);
 		return new SuccessResult();
 	}
 

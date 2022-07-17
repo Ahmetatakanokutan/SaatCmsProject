@@ -2,6 +2,7 @@ package com.example.saatCMSProject.business.conctetes;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,18 @@ import com.example.saatCMSProject.core.results.SuccessDataResult;
 import com.example.saatCMSProject.core.results.SuccessResult;
 import com.example.saatCMSProject.dataAccess.abstracts.LicenseDao;
 import com.example.saatCMSProject.entity.License;
+import com.example.saatCMSProject.entity.dtos.LicenseDto;
 
 @Service
 public class LicenseManager implements LicenseService {
 
 	LicenseDao licenseDao;
+	private final ModelMapper modelMapper;
 
 	@Autowired
 	public LicenseManager(LicenseDao licenseDao) {
 		super();
+		this.modelMapper = new ModelMapper();
 		this.licenseDao = licenseDao;
 	}
 
@@ -32,13 +36,15 @@ public class LicenseManager implements LicenseService {
 		return new SuccessDataResult<License>(licenseDao.findById(id));
 	}
 
-	public Result addLicense(License license) {
+	public Result addLicense(LicenseDto licenseDto) {
+		
+		License license = modelMapper.map(licenseDto, License.class);
 		licenseDao.save(license);
 		return new SuccessResult("license added successfully");
 	}
 
-	public Result deleteLicense(License license) {
-		licenseDao.delete(license);
+	public Result deleteLicense(String name) {
+		licenseDao.delete(licenseDao.findByname(name));
 		return new SuccessResult("license deleted successfully");
 	}
 }

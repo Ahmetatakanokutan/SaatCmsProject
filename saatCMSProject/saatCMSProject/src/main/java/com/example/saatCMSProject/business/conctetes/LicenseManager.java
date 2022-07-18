@@ -39,6 +39,7 @@ public class LicenseManager implements LicenseService {
 	public Result addLicense(LicenseDto licenseDto) {
 		
 		License license = modelMapper.map(licenseDto, License.class);
+		String endDate = license.getEndTime();
 		licenseDao.save(license);
 		return new SuccessResult("license added successfully");
 	}
@@ -46,5 +47,15 @@ public class LicenseManager implements LicenseService {
 	public Result deleteLicense(String name) {
 		licenseDao.delete(licenseDao.findByname(name));
 		return new SuccessResult("license deleted successfully");
+	}
+
+	@Override
+	public Result updateLicense(String licenseName, LicenseDto licenseDto) {
+		
+		License license = modelMapper.map(licenseDto, License.class);
+		
+		license.setId(licenseDao.findByname(licenseName).getId());
+		licenseDao.save(license);
+		return new SuccessResult("license updated successfully");
 	}
 }

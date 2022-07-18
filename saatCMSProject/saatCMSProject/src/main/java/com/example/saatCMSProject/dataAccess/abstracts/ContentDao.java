@@ -10,5 +10,6 @@ import com.example.saatCMSProject.entity.dtos.ContentDto;
 public interface ContentDao extends JpaRepository<Content, Integer> {
 
 	Content findByname(String name);
+	Content findByid(int id);
 
 }

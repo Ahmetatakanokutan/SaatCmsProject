@@ -30,33 +30,33 @@ public class ContentController {
 		this.contentService = contentService;
 	}
 
-	@PostMapping("add_content")
+	@PostMapping("addContent")
 	Result addContent(ContentDto contentDto) {
 		return contentService.addContent(contentDto);
 
 	}
 
-	@GetMapping("/get_content_by_id")
+	@GetMapping("/getContentById")
 	DataResult<Content> getContentByid(int id) {
 		return contentService.getContentByid(id);
 
 	}
 
-	@PostMapping("/delete_content")
+	@PostMapping("/deleteContent")
 	Result deleteContent(String name) {
 		return contentService.deleteContent(name);
 
 	}
 
-	@GetMapping("/get_all")
+	@GetMapping("/getAll")
 	DataResult<List<Content>> getAll() {
 		return contentService.getAll();
 	}
 	
 	@PostMapping("/addLicenseToContent")
-	Result addLicenseToContent(String contentName , License license) {
+	Result addLicenseToContent(String contentName, String licenseName) {
 
-		return contentService.addLicenseToContent(contentName, license);
+		return contentService.addLicenseToContent(contentName, licenseName);
 	}
 
 	@PostMapping("/update")

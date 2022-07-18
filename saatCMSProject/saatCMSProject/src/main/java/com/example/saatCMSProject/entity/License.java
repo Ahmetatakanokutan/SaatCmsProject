@@ -1,10 +1,13 @@
 package com.example.saatCMSProject.entity;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,20 +38,22 @@ public class License extends LicenseDto{
 	@Column(name = "license_id")
 	private int id;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Nullable
+	private List<Content> contents = new ArrayList<Content>();
+	
 	@Column(name = "name")
 	@Nullable
 	private String name;
 	
 	@Column(name = "start_time")
 	@Nullable
-	private Date startTime;
+	private String startTime;
 	
 	@Column(name = "ent_time")
 	@Nullable
-	private Date endTime;
+	private String endTime;
 	
-	@ManyToMany()
-	@Nullable
-	List<Content> contents;
+
 	
 }

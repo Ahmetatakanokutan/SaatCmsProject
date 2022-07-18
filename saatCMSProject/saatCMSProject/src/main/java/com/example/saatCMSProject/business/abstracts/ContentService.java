@@ -19,7 +19,7 @@ public interface ContentService {
 
 	Result deleteContent(String name);
 
-	Result addLicenseToContent(String name, License license);
+	Result addLicenseToContent(String contentName, String licenseName);
 
 	Result updateContent(String contentName, ContentDto contentDto);
 

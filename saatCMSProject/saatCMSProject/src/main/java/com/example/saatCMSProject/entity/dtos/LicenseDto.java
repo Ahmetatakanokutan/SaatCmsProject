@@ -1,5 +1,6 @@
 package com.example.saatCMSProject.entity.dtos;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,8 +21,8 @@ public class LicenseDto {
 	
 	private String name;
 
-	private Date startTime;
+	private String startTime;
 
-	private Date endTime;
+	private String endTime;
 	
 }

@@ -1,9 +1,11 @@
 package com.example.saatCMSProject.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,12 +38,12 @@ public class Content  {
 	private int id;
 
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 	  joinColumns = @JoinColumn(name = "content_id"), 
 	  inverseJoinColumns = @JoinColumn(name = "license_id"))
 	@Nullable
-	private List<License> licenses;
+	private List<License> licenses = new ArrayList<License>();
 
 	@Column(name = "name")
 	@Nullable

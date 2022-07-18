@@ -48,5 +48,10 @@ public class LicenseController {
 		licenseService.deleteLicense(name);
 		return new SuccessResult();
 	}
+	
+	@PostMapping("/update")
+	Result UpdateLicense(String licenseName , LicenseDto licenseDto) {
+		return licenseService.updateLicense(licenseName, licenseDto);
+	}
 
 }

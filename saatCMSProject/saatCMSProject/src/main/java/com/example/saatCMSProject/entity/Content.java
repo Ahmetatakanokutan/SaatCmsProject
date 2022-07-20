@@ -34,8 +34,7 @@ public class Content  {
 	@Id
 
 	@Column(name = "content_id")
-	
-	private int id;
+	private long id;
 
 
 	@ManyToMany(fetch = FetchType.EAGER)

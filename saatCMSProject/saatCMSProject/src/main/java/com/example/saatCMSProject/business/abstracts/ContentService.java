@@ -11,7 +11,7 @@ import com.example.saatCMSProject.entity.dtos.LicenseDto;
 
 public interface ContentService {
 
-	DataResult<Content> getContentByid(int id);
+	DataResult<Content> getContentByid(long id);
 
 	DataResult<List<Content>> getAll();
 
@@ -19,9 +19,9 @@ public interface ContentService {
 
 	Result deleteContent(String name);
 
-	Result addLicenseToContent(String contentName, String licenseName);
+	Result addLicenseToContent(long contentId, long licenseId);
 
-	Result updateContent(String contentName, ContentDto contentDto);
+	Result updateContent(ContentDto contentDto);
 
 	void contentCheck(Content content);
 }

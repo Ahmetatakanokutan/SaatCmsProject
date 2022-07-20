@@ -44,17 +44,16 @@ public class LicenseManager implements LicenseService {
 		return new SuccessResult("license added successfully");
 	}
 
-	public Result deleteLicense(String name) {
-		licenseDao.delete(licenseDao.findByname(name));
+	@Override
+	public Result deleteLicense(long licenseId) {
+		licenseDao.delete(licenseDao.getById(licenseId));
 		return new SuccessResult("license deleted successfully");
 	}
 
 	@Override
-	public Result updateLicense(String licenseName, LicenseDto licenseDto) {
+	public Result updateLicense(LicenseDto licenseDto) {
 		
 		License license = modelMapper.map(licenseDto, License.class);
-		
-		license.setId(licenseDao.findByname(licenseName).getId());
 		licenseDao.save(license);
 		return new SuccessResult("license updated successfully");
 	}

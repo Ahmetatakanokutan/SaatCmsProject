@@ -48,9 +48,8 @@ public class ContentManager implements ContentService {
 
 	
 	@Override
-	public DataResult <Content> getContentByid(int id) {
-		;
-		return new SuccessDataResult <Content>(contentDao.findByid(id));
+	public DataResult <Content> getContentByid(long id) {
+		return new SuccessDataResult <Content>(contentDao.getById(id));
 		
 	}
 
@@ -76,16 +75,16 @@ public class ContentManager implements ContentService {
 	}
 
 	@Override
-	public Result addLicenseToContent(String contentName, String licenseName) {
+	public Result addLicenseToContent(long contentId, long licenseId) {
 		
-		License license = licenseDao.findByname(licenseName);
+		License license = licenseDao.findById(licenseId);
 		
-		if (contentDao.findByname(contentName).getLicenses().contains(license)) {
+		if (contentDao.getById(contentId).getLicenses().contains(license)) {
 			return new ErrorResult("you have same license");
 		} else
-			contentCheck(contentDao.findByname(contentName));
+			contentCheck(contentDao.getById(contentId));
 		
-		Content content = contentDao.findByname(contentName);
+		Content content = contentDao.getById(contentId);
 		content.getLicenses().add(license);
 
 		contentDao.save(content);
@@ -105,13 +104,11 @@ public class ContentManager implements ContentService {
 	}
 
 	@Override
-	public Result updateContent(String contentName, ContentDto contentDto) {
+	public Result updateContent(ContentDto contentDto) {
 
 		Content content = modelMapper.map(contentDto, Content.class);
-		
-		
-		content.setId(contentDao.findByname(contentName).getId());
-		content.setLicenses(contentDao.findByname(contentName).getLicenses());
+
+		content.setLicenses(contentDao.getById(contentDto.getId()).getLicenses());
 		contentDao.save(content);
 
 		return new SuccessResult("content upadted successfully");

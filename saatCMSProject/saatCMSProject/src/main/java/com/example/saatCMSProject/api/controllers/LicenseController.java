@@ -2,12 +2,9 @@ package com.example.saatCMSProject.api.controllers;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.saatCMSProject.business.abstracts.LicenseService;
 import com.example.saatCMSProject.core.results.DataResult;
@@ -19,39 +16,35 @@ import com.example.saatCMSProject.entity.dtos.LicenseDto;
 @RestController
 @RequestMapping("api/licenses")
 @CrossOrigin(origins = "http://localhost:4200/")
+@AllArgsConstructor
 public class LicenseController {
-	LicenseService licenseService;
+	private final LicenseService licenseService;
 
-	@Autowired
-	public LicenseController(LicenseService licenseService) {
-		super();
-		this.licenseService = licenseService;
-	}
 
-	@GetMapping("/get_all")
+	@GetMapping
 	DataResult<List<License>> getAll() {
 		return licenseService.getAll();
 	}
 
-	@GetMapping("/get_by_id")
-	DataResult<License> getById(int id) {
+	@GetMapping("{id}")
+	DataResult<License> getById(@RequestBody int id) {
 		return licenseService.getById(id);
 	}
 
-	@PostMapping("/add_license")
-	Result addLicense(LicenseDto licenseDto) {
+	@PostMapping
+	Result addLicense(@RequestBody LicenseDto licenseDto) {
 		return licenseService.addLicense(licenseDto);
 	}
 
-	@PostMapping("/delete_license")
-	Result deleteLicense(String name) {
-		licenseService.deleteLicense(name);
-		return new SuccessResult();
+	@DeleteMapping
+	Result deleteLicense(@RequestBody long licenseId) {
+
+		return licenseService.deleteLicense(licenseId);
 	}
 	
-	@PostMapping("/update")
-	Result UpdateLicense(String licenseName , LicenseDto licenseDto) {
-		return licenseService.updateLicense(licenseName, licenseDto);
+	@PutMapping
+	Result UpdateLicense(@RequestBody LicenseDto licenseDto) {
+		return licenseService.updateLicense(licenseDto);
 	}
 
 }

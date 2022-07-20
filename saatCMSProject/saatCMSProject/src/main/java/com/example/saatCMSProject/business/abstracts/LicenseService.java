@@ -14,7 +14,7 @@ public interface LicenseService {
 
 	Result addLicense(LicenseDto licenseDto);
 
-	Result deleteLicense(String name);
+	Result deleteLicense(long licenseId);
 	
-	Result updateLicense(String licenseName , LicenseDto licenseDto);
+	Result updateLicense(LicenseDto licenseDto);
 }

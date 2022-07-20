@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.saatCMSProject.entity.License;
 
-public interface LicenseDao extends JpaRepository<License, Integer> {
+public interface LicenseDao extends JpaRepository<License, Long> {
 
-	License findById(int id);
+	License findById(long id);
 	License findByname(String name);
 
 }

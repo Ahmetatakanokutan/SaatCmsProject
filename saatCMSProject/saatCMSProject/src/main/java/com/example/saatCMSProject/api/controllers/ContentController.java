@@ -2,12 +2,9 @@ package com.example.saatCMSProject.api.controllers;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.saatCMSProject.business.abstracts.ContentService;
 import com.example.saatCMSProject.core.results.DataResult;
@@ -18,50 +15,46 @@ import com.example.saatCMSProject.entity.dtos.ContentDto;
 import com.example.saatCMSProject.entity.dtos.LicenseDto;
 
 @RestController
-@RequestMapping("api/Content")
+@RequestMapping("api/contents")
 @CrossOrigin(origins = "http://localhost:4200/")
+@AllArgsConstructor
 public class ContentController {
 
-	ContentService contentService;
+	private final ContentService contentService;
 
-	@Autowired
-	public ContentController(ContentService contentService) {
-		super();
-		this.contentService = contentService;
-	}
-
-	@PostMapping("addContent")
-	Result addContent(ContentDto contentDto) {
+	@PostMapping
+	Result addContent(@RequestBody ContentDto contentDto) {
 		return contentService.addContent(contentDto);
 
 	}
 
-	@GetMapping("/getContentById")
-	DataResult<Content> getContentByid(int id) {
+	@GetMapping("/{id}")
+	DataResult<Content> getContentByid(@RequestBody int id) {
 		return contentService.getContentByid(id);
 
 	}
 
-	@PostMapping("/deleteContent")
-	Result deleteContent(String name) {
+	@DeleteMapping
+	Result deleteContent(@RequestBody String name) {
 		return contentService.deleteContent(name);
 
 	}
 
-	@GetMapping("/getAll")
+	@GetMapping
 	DataResult<List<Content>> getAll() {
 		return contentService.getAll();
 	}
 	
-	@PostMapping("/addLicenseToContent")
-	Result addLicenseToContent(String contentName, String licenseName) {
+	@PostMapping("{contentId}/licenses/{licenseId}/add")
+	Result addLicenseToContent(@PathVariable("contentId") Long contentId,
+							   @PathVariable("licenseId") Long licenseId) {
 
-		return contentService.addLicenseToContent(contentName, licenseName);
+		return contentService.addLicenseToContent(contentId, licenseId);
 	}
 
-	@PostMapping("/update")
-	Result updateContent(String contentName, ContentDto contentDto) {
-		return contentService.updateContent(contentName, contentDto);
+	@PutMapping
+	Result updateContent(@RequestBody ContentDto contentDto) {
+		return contentService.updateContent(contentDto);
 
 	}
 

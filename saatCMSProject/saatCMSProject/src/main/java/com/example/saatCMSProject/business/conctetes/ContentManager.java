@@ -30,9 +30,9 @@ import com.example.saatCMSProject.entity.dtos.LicenseDto;
 @EnableScheduling
 public class ContentManager implements ContentService {
 
-	ContentDao contentDao;
-	LicenseDao licenseDao;
-	LocalDate currentDate = LocalDate.now() ;
+	private final ContentDao contentDao;
+	private final LicenseDao licenseDao;
+	private final LocalDate currentDate = LocalDate.now() ;
 	
 
 	private final ModelMapper modelMapper;
@@ -96,7 +96,8 @@ public class ContentManager implements ContentService {
 	@Override
 	public void contentCheck(Content content) {
 		
-		if (content.getLicenses() != null && content.getPosterUrl() != null && content.getVideoUrl() != null) {
+		if (content.getLicenses() != null && content.getPosterUrl() != null && content.getVideoUrl() != null
+		&& content.getVideoUrl() !="") {
 			content.setStatus("Published");
 		}
 		else
@@ -109,6 +110,7 @@ public class ContentManager implements ContentService {
 		Content content = modelMapper.map(contentDto, Content.class);
 
 		content.setLicenses(contentDao.getById(contentDto.getId()).getLicenses());
+		contentCheck(content);
 		contentDao.save(content);
 
 		return new SuccessResult("content upadted successfully");
@@ -116,7 +118,7 @@ public class ContentManager implements ContentService {
 		
 	}
 	
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 1000)
 	public void StartAndEndTimeController() {
 		
 		for (Content content : contentDao.findAll()) {
@@ -129,6 +131,7 @@ public class ContentManager implements ContentService {
 					contentCheck(content);	
 				}
 				else
+					//contentCheck(content);
 					content.setStatus("in progress");
 		}
 			contentDao.save(content);

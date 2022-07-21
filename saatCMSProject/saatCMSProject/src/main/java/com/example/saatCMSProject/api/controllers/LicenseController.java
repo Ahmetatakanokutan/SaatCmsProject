@@ -38,7 +38,6 @@ public class LicenseController {
 
 	@DeleteMapping
 	Result deleteLicense(@RequestBody long licenseId) {
-
 		return licenseService.deleteLicense(licenseId);
 	}
 	

@@ -50,7 +50,7 @@ public class Content  {
 
 	@Column(name = "status")
 	@Nullable
-	private String status;
+	private String status = "in progress";
 
 	@Column(name = "poster_url")
 	@Nullable

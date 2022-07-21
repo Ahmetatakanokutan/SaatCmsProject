@@ -18,7 +18,7 @@ import com.example.saatCMSProject.entity.dtos.LicenseDto;
 @Service
 public class LicenseManager implements LicenseService {
 
-	LicenseDao licenseDao;
+	private final LicenseDao licenseDao;
 	private final ModelMapper modelMapper;
 
 	@Autowired

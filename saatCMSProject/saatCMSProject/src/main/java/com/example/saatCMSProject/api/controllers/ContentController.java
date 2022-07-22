@@ -29,14 +29,14 @@ public class ContentController {
 	}
 
 	@GetMapping("/{id}")
-	DataResult<Content> getContentByid(@RequestBody int id) {
-		return contentService.getContentByid(id);
+	DataResult<Content> getContentByid(@PathVariable("id") Long contentId) {
+		return contentService.getContentByid(contentId);
 
 	}
 
-	@DeleteMapping
-	Result deleteContent(@RequestBody String name) {
-		return contentService.deleteContent(name);
+	@DeleteMapping("{contentId}")
+	Result deleteContent(@PathVariable("contentId") long id) {
+		return contentService.deleteContent(id);
 
 	}
 

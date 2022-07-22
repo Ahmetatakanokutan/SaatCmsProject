@@ -17,11 +17,11 @@ public interface ContentService {
 
 	Result addContent(ContentDto contentDto);
 
-	Result deleteContent(String name);
+	Result deleteContent(long id);
 
 	Result addLicenseToContent(long contentId, long licenseId);
 
 	Result updateContent(ContentDto contentDto);
 
-	void contentCheck(Content content);
+	//void contentCheck(Content content);
 }

@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.lang.Nullable;
 
@@ -29,6 +30,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "content")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Content  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id

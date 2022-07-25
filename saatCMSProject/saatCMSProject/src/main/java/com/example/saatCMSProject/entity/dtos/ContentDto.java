@@ -16,14 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ContentDto {
 
+    private long id;
 
-	private long id;
+    private String name;
 
-	private String name;
+    private String posterUrl;
 
-
-
-	private String posterUrl;
-
-	private String videoUrl;
+    private String videoUrl;
 }

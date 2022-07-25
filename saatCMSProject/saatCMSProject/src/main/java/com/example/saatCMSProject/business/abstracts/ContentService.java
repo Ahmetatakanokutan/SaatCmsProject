@@ -11,7 +11,7 @@ import com.example.saatCMSProject.entity.dtos.LicenseDto;
 
 public interface ContentService {
 
-	DataResult<Content> getContentByid(long id);
+	DataResult<Content> getContentById(long id);
 
 	DataResult<List<Content>> getAll();
 

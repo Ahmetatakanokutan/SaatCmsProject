@@ -20,7 +20,6 @@ import com.example.saatCMSProject.entity.dtos.LicenseDto;
 public class LicenseController {
 	private final LicenseService licenseService;
 
-
 	@GetMapping
 	DataResult<List<License>> getAll() {
 		return licenseService.getAll();
@@ -40,10 +39,9 @@ public class LicenseController {
 	Result deleteLicense(@RequestBody long licenseId) {
 		return licenseService.deleteLicense(licenseId);
 	}
-	
+
 	@PutMapping
 	Result UpdateLicense(@RequestBody LicenseDto licenseDto) {
 		return licenseService.updateLicense(licenseDto);
 	}
-
 }

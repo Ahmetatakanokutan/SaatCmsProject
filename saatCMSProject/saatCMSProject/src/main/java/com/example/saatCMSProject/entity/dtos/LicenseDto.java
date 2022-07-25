@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LicenseDto {
 
-
 	private long id;
 	
 	private String name;

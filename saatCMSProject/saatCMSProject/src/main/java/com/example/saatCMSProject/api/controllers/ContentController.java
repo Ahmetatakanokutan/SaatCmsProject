@@ -30,7 +30,7 @@ public class ContentController {
 
 	@GetMapping("/{id}")
 	DataResult<Content> getContentByid(@PathVariable("id") Long contentId) {
-		return contentService.getContentByid(contentId);
+		return contentService.getContentById(contentId);
 
 	}
 
@@ -57,5 +57,4 @@ public class ContentController {
 		return contentService.updateContent(contentDto);
 
 	}
-
 }

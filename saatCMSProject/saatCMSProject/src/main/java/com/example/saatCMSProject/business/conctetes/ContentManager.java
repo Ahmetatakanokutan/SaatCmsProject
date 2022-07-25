@@ -1,28 +1,21 @@
 package com.example.saatCMSProject.business.conctetes;
 
-import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.*;
-
-import org.apache.catalina.User;
+import com.example.saatCMSProject.business.abstracts.ContentService;
+import com.example.saatCMSProject.core.results.*;
+import com.example.saatCMSProject.dataAccess.abstracts.ContentDao;
+import com.example.saatCMSProject.dataAccess.abstracts.LicenseDao;
+import com.example.saatCMSProject.entity.Content;
+import com.example.saatCMSProject.entity.License;
+import com.example.saatCMSProject.entity.dtos.ContentDto;
+import com.example.saatCMSProject.entity.enums.Status;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.example.saatCMSProject.business.abstracts.ContentService;
-import com.example.saatCMSProject.core.results.DataResult;
-import com.example.saatCMSProject.core.results.ErrorResult;
-import com.example.saatCMSProject.core.results.Result;
-import com.example.saatCMSProject.core.results.SuccessDataResult;
-import com.example.saatCMSProject.core.results.SuccessResult;
-import com.example.saatCMSProject.dataAccess.abstracts.ContentDao;
-import com.example.saatCMSProject.dataAccess.abstracts.LicenseDao;
-import com.example.saatCMSProject.entity.Content;
-import com.example.saatCMSProject.entity.License;
-import com.example.saatCMSProject.entity.dtos.ContentDto;
-import com.example.saatCMSProject.entity.dtos.LicenseDto;
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @EnableScheduling
@@ -31,7 +24,6 @@ public class ContentManager implements ContentService {
     private final ContentDao contentDao;
     private final LicenseDao licenseDao;
     private final LocalDate currentDate = LocalDate.now();
-
 
     private final ModelMapper modelMapper;
 
@@ -44,9 +36,8 @@ public class ContentManager implements ContentService {
 
     }
 
-
     @Override
-    public DataResult<Content> getContentByid(long id) {
+    public DataResult<Content> getContentById(long id) {
         return new SuccessDataResult<Content>(contentDao.getById(id));
 
     }
@@ -54,8 +45,7 @@ public class ContentManager implements ContentService {
     @Override
     public Result addContent(ContentDto contentDto) {
         Content content = modelMapper.map(contentDto, Content.class);
-        content.setStatus("in progress");
-        content.getLicenses().clear();
+        content.setStatus(Status.InProgress);
 
         contentDao.save(content);
         return new SuccessResult();
@@ -76,39 +66,33 @@ public class ContentManager implements ContentService {
     public Result addLicenseToContent(long contentId, long licenseId) {
 
         License license = licenseDao.findById(licenseId);
-
-        if (contentDao.getById(contentId).getLicenses().contains(license)) {
+        Content content = contentDao.getById(contentId);
+        if (content.getLicenses().contains(license)) {
             return new ErrorResult("you have same license");
         }
-
-        Content content = contentDao.getById(contentId);
         content.getLicenses().add(license);
 
         contentDao.save(content);
 
         return new SuccessResult("new license added successfully");
-
     }
-
-
 
     @Override
     public Result updateContent(ContentDto contentDto) {
-
+        Content currentContent = contentDao.getById(contentDto.getId());
         Content content = modelMapper.map(contentDto, Content.class);
-        content.getLicenses().clear();
-        content.setLicenses(contentDao.getById(contentDto.getId()).getLicenses());
+        content.setStatus(currentContent.getStatus());
+        content.setLicenses(currentContent.getLicenses());
         contentDao.save(content);
 
         return new SuccessResult("content updated successfully");
-
-
     }
 
-    @Scheduled(fixedRate = 1000)
+
+    @Scheduled(cron = "30 * * * * ?")
     public void StartAndEndTimeController() {
 
-        for (Content content : contentDao.getByStatus("in progress")) {
+        for (Content content : contentDao.getByStatus(Status.InProgress)) {
             if (content.getVideoUrl() == null) {
                 continue;
             }
@@ -120,9 +104,23 @@ public class ContentManager implements ContentService {
                 LocalDate startTime = LocalDate.parse(license.getStartTime());
                 LocalDate endTime = LocalDate.parse(license.getEndTime());
                 if (currentDate.isAfter(startTime) && currentDate.isBefore(endTime)) {
-                    content.setStatus("Published");
+                    content.setStatus(Status.Published);
                     contentDao.save(content);
                     return;
+                }
+            }
+        }
+    }
+    @Scheduled(cron = "00 * * * * ?")
+    public void CheckPublished(){
+        for (Content content:contentDao.getByStatus(Status.Published)) {
+            for (License license: content.getLicenses()) {
+                LocalDate startTime = LocalDate.parse(license.getStartTime());
+                LocalDate endTime = LocalDate.parse(license.getEndTime());
+
+                if (!(currentDate.isAfter(startTime) && currentDate.isBefore(endTime))){
+                    content.setStatus(Status.InProgress);
+                    contentDao.save(content);
                 }
             }
         }

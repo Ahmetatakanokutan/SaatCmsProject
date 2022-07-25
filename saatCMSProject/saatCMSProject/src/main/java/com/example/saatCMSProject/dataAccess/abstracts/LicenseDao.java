@@ -7,6 +7,4 @@ import com.example.saatCMSProject.entity.License;
 public interface LicenseDao extends JpaRepository<License, Long> {
 
 	License findById(long id);
-	License findByname(String name);
-
 }

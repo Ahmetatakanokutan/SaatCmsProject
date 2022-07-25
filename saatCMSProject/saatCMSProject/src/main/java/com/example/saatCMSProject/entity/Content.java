@@ -3,23 +3,11 @@ package com.example.saatCMSProject.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.example.saatCMSProject.entity.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.context.annotation.Primary;
 import org.springframework.lang.Nullable;
-
-import com.example.saatCMSProject.entity.dtos.ContentDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +27,7 @@ public class Content  {
 	private long id;
 
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 	  joinColumns = @JoinColumn(name = "content_id"), 
 	  inverseJoinColumns = @JoinColumn(name = "license_id"))
@@ -50,9 +38,10 @@ public class Content  {
 	@Nullable
 	private String name;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	@Nullable
-	private String status = "in progress";
+	private Status status = Status.InProgress;
 
 	@Column(name = "poster_url")
 	@Nullable

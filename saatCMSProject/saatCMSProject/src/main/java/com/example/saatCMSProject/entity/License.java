@@ -38,7 +38,7 @@ public class License extends LicenseDto{
 	@Column(name = "license_id")
 	private long id;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@Nullable
 	private List<Content> contents = new ArrayList<Content>();
 	

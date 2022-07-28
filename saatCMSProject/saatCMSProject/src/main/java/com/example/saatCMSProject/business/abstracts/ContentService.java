@@ -8,12 +8,13 @@ import com.example.saatCMSProject.entity.Content;
 import com.example.saatCMSProject.entity.License;
 import com.example.saatCMSProject.entity.dtos.ContentDto;
 import com.example.saatCMSProject.entity.dtos.LicenseDto;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface ContentService {
 
 	DataResult<Content> getContentById(long id);
 
-	DataResult<List<Content>> getAll();
+	DataResult<List<Content>> getAll(String search);
 
 	Result addContent(ContentDto contentDto);
 

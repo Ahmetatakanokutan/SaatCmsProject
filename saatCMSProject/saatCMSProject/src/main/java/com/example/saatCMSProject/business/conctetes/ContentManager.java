@@ -8,14 +8,22 @@ import com.example.saatCMSProject.entity.Content;
 import com.example.saatCMSProject.entity.License;
 import com.example.saatCMSProject.entity.dtos.ContentDto;
 import com.example.saatCMSProject.entity.enums.Status;
+import com.example.saatCMSProject.entity.spesifications.ContentBuilder;
+import com.example.saatCMSProject.entity.spesifications.ContentSpesification;
+import com.example.saatCMSProject.entity.spesifications.SearchCriteria;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import springfox.documentation.service.ContentSpecification;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @EnableScheduling
@@ -38,7 +46,8 @@ public class ContentManager implements ContentService {
 
     @Override
     public DataResult<Content> getContentById(long id) {
-        return new SuccessDataResult<Content>(contentDao.getById(id));
+
+        return new SuccessDataResult(contentDao.getById(id));
 
     }
 
@@ -52,8 +61,18 @@ public class ContentManager implements ContentService {
     }
 
     @Override
-    public DataResult<List<Content>> getAll() {
-        return new SuccessDataResult<List<Content>>(this.contentDao.findAll());
+    public DataResult<List<Content>> getAll(String search) {
+
+        search = "and " + search +" ,";
+        ContentBuilder contentBuilder = new ContentBuilder();
+        Pattern pattern = Pattern.compile("(\\w+?)(\\s)(\\w+?)(:|<|>)(\\w+?)(\\s),");
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            contentBuilder.with(matcher.group(1), matcher.group(3), matcher.group(4) , matcher.group(5));
+        }
+
+        Specification<Content> spec = contentBuilder.build();
+        return new SuccessDataResult<List<Content>>(this.contentDao.findAll(spec));
     }
 
     @Override
@@ -103,11 +122,15 @@ public class ContentManager implements ContentService {
             for (License license : content.getLicenses()) {
                 LocalDate startTime = LocalDate.parse(license.getStartTime());
                 LocalDate endTime = LocalDate.parse(license.getEndTime());
+                if(content.getStatus() == Status.Published){
+
+                }
                 if (currentDate.isAfter(startTime) && currentDate.isBefore(endTime)) {
                     content.setStatus(Status.Published);
                     contentDao.save(content);
                     return;
                 }
+
             }
         }
     }
@@ -118,12 +141,16 @@ public class ContentManager implements ContentService {
                 LocalDate startTime = LocalDate.parse(license.getStartTime());
                 LocalDate endTime = LocalDate.parse(license.getEndTime());
 
-                if (!(currentDate.isAfter(startTime) && currentDate.isBefore(endTime))){
-                    content.setStatus(Status.InProgress);
+                if (currentDate.isAfter(startTime) && currentDate.isBefore(endTime)){
+                    content.setStatus(Status.Published);
                     contentDao.save(content);
+                    return;
                 }
+                content.setStatus(Status.InProgress);
+                contentDao.save(content);
             }
         }
     }
+
 
 }

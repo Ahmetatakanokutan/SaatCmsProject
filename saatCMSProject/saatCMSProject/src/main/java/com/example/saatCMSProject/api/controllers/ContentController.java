@@ -1,6 +1,7 @@
 package com.example.saatCMSProject.api.controllers;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,8 @@ public class ContentController {
 	}
 
 	@GetMapping
-	DataResult<List<Content>> getAll() {
-		return contentService.getAll();
+	DataResult<List<Content>> getData(@RequestParam(value = "search")String search) {
+		return contentService.getAll(search);
 	}
 	
 	@PostMapping("{contentId}/licenses/{licenseId}/add")
